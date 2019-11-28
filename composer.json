@@ -13,7 +13,6 @@
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
-        "iexbase/tron-api": "^2.0",
         "irazasyed/telegram-bot-sdk": "^2.0",
         "laravel/framework": "5.6.*",
         "laravel/passport": "^4.0",

@@ -13,7 +13,7 @@
 
 Route::get('test', 'TestController@getTest');
 
-Route::get('/', 'System\IndexController@index')->name('getIndex');
+Route::get('/', 'System\IndexController@index   ')->name('getIndex');
 
 Route::get('login', 'Auth\LoginController@getLogin')->name('getLogin');
 Route::post('login', 'Auth\LoginController@postLogin')->name('postLogin');
@@ -67,7 +67,7 @@ Route::group(['prefix' => 'system', 'middleware' => 'login'], function () {
         Route::get('get-investment', 'System\InvestmentController@getInvestmentByID')->name('system.getInvestmentByID');
         Route::get('cancel-investment', 'System\InvestmentController@CancelInvestmentByID')->name('system.CancelInvestmentByID');
         //Rufund or Reinvestment
-        
+
         Route::put('action/refund/{id}', 'System\InvestmentController@postActionRefund')->name('postActionRefund');
         Route::put('action/reinvestment/{id}', 'System\InvestmentController@postActionReinvestment')->name('postActionReinvestment');
         //get info pakage
@@ -106,6 +106,8 @@ Route::group(['prefix' => 'system', 'middleware' => 'login'], function () {
         Route::get('active-mail/{id}', 'System\AdminController@getActiveMail')->name('system.admin.getActiveMail');
         Route::post('edit-mail', 'System\AdminController@getEditMailByID')->name('system.admin.getEditMailByID');
         Route::get('disable-auth/{id}', 'System\AdminController@getDisableAuth')->name('system.admin.getDisableAuth');
+        Route::get('edit-user/{id}', 'System\AdminController@getEditUser')->name('system.admin.getEditUser');
+
         //Wallet
         Route::get('wallet', 'System\AdminController@getWallet')->name('system.admin.getWallet');
         Route::get('interest', 'System\AdminController@getInterest')->name('system.admin.getInterest');

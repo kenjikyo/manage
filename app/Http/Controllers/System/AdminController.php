@@ -57,14 +57,17 @@ class AdminController extends Controller
         if ($req->sponsor) {
             $where .= ' AND User_Parent = ' . $req->sponsor;
         }
-        if ($req->level) {
-            $where .= ' AND User_Agency_Level = ' . $req->level;
+        if ($req->agency_level) {
+            $where .= ' AND User_Agency_Level = ' . $req->agency_level;
         }
         if ($req->datetime) {
             $where .= ' AND date(User_RegisteredDatetime) = "' . date('Y-m-d', strtotime($req->datetime)) . '"';
         }
-        if ($req->status != null) {
-            $where .= ' AND User_EmailActive = ' . $req->status;
+        if ($req->status_email != null) {
+            $where .= ' AND User_EmailActive = ' . $req->status_email;
+        }
+        if ($req->level != null) {
+            $where .= ' AND User_Level = ' . $req->level;
         }
         if ($req->tree != '') {
 
@@ -75,7 +78,6 @@ class AdminController extends Controller
                 dd('Stop');
             }
             $Member = User::leftJoin('google2fa','google2fa.google2fa_User','users.User_ID')
-                ->select('User_ID', 'google2fa.google2fa_User', 'User_Name', 'User_Email', 'User_RegisteredDatetime', 'User_Tree', 'User_Parent', 'User_EmailActive', 'User_Level')
                 ->whereRaw('1 ' . $where)
                 ->orderBy('User_RegisteredDatetime', 'DESC')->get();
             $member = array();
@@ -118,11 +120,11 @@ class AdminController extends Controller
                 });
             })->download('xls');
         }
+
         $user_list = User::leftJoin('google2fa','google2fa.google2fa_User','users.User_ID')
-        ->select('User_ID', 'google2fa.google2fa_User', 'User_Name', 'User_Email', 'User_RegisteredDatetime', 'User_Parent', 'User_EmailActive', 'User_Tree', 'User_Level', 'User_Agency_Level')
+        ->join('user_level','User_Level_ID','User_Level')
         ->whereRaw('1 ' . $where)
         ->orderBy('User_RegisteredDatetime', 'DESC');
-        // dd($user_list->get());
         $user_list = $user_list->paginate(15);
         return view('System.Admin.User', compact('user_list'));
     }
@@ -170,7 +172,7 @@ class AdminController extends Controller
     public function confirmProfile(Request $request)
     {
         if(Session('user')->User_Level != 1 && Session('user')->User_Level != 3){
-            return response()->json(['status' => 'error', 'message' => 'Error, please contact admin!'], 200); 
+            return response()->json(['status' => 'error', 'message' => 'Error, please contact admin!'], 200);
         }
         if ($request->action == 1) {
             $updateProfileStatus = Profile::where('Profile_ID', $request->id)->update(['Profile_Status' => 1]);
@@ -577,7 +579,7 @@ class AdminController extends Controller
 							$rate = $this->coinbase()->getSellPrice('BTC-USD')->getamount();
 							$newMoney = new CB_Money($amountReal, CurrencyCode::BTC);
 						}
-						
+
 						// Amount
 						$transaction = Transaction::send([
 							'toBitcoinAddress' => $detail->Money_Address,
@@ -585,20 +587,20 @@ class AdminController extends Controller
 							'description'      => $detail->Money_User.' Withdraw!'
 						]);
 
-						
+
 						$account = $this->coinbase()->getAccount($cb_account);
 
 						try {
-							$a = $this->coinbase()->createAccountTransaction($account, $transaction);	
-							
-							Money::where('Money_ID',$id)->update(['Money_Confirm'=>1]);	
+							$a = $this->coinbase()->createAccountTransaction($account, $transaction);
+
+							Money::where('Money_ID',$id)->update(['Money_Confirm'=>1]);
 							//Money::where('Money_ID',$id)->update(['Money_MoneyStatus'=>1]);
-	
-				
+
+
 							return redirect()->back()->with(['flash_level'=>'success', 'flash_message'=>'Confirm Successfully.']);
 						}catch (\Exception $e) {
 							return redirect()->back()->with(['flash_level'=>'error', 'flash_message'=>$e->getMessage()]);
-						}	
+						}
 					}
                 }
             } else {
@@ -739,12 +741,12 @@ if ($detail->Money_Confirm == 0) {
 */
 	        }
 	        return response()->json(['status'=>true, 'message'=>'Send SOX List '.$listID.' Success!']);
-	        
+
         }elseif($req->type == -1){
         	$log = Log::insertLog($user->User_ID, 'Cancel List', 0, 'Cancel Interest List: '.$listID);
 			$getListUnConfirm = Money::whereIn('Money_ID', $arrIDMoney)->where('Money_Confirm', 0)->pluck('Money_ID')->toArray();
 	        $updateList = Money::whereIn('Money_ID', $getListUnConfirm)->update(['Money_Confirm'=>-1]);
-	        
+
 	        return response()->json(['status'=>true, 'message'=>'Cancel List: '.$listID.' Success!']);
         }
         return response()->json(['status'=>false, 'message'=>'Action Error!']);
@@ -754,7 +756,7 @@ if ($detail->Money_Confirm == 0) {
         $log_SOX = DB::table('log_sox')->orderByDesc('Log_Sox_Time')->paginate(15);
         return view('System.Admin.Log-SOX', compact('log_SOX'));
     }
-    
+
     public function getActiveMail($id){
         $check_user = User::where('User_ID',$id)->first();
         if(!$check_user){
@@ -766,4 +768,10 @@ if ($detail->Money_Confirm == 0) {
         $check_user->save();
         return redirect()->back()->with(['flash_level' => 'success', 'flash_message' => 'Active mail!']);
     }
+
+    public function getEditUser($id){
+        $user_list = User::where('User_ID',$id)->join('user_level','User_Level_ID','User_Level')->get();
+        return view('System.Admin.EditUser', compact('user_list'));
+    }
+
 }

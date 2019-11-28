@@ -26,17 +26,12 @@
 </style>
 
 <!--THIS PAGE LEVEL CSS-->
-<link
-    href="datetime/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css"
+<link href="datetime/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css"
     rel="stylesheet" />
-<link href="datetime/plugins/bootstrap-datetime-picker/css/bootstrap-datetimepicker.css"
-    rel="stylesheet" />
-<link href="datetime/plugins/boootstrap-datepicker/bootstrap-datepicker3.min.css"
-    rel="stylesheet" />
-<link href="datetime/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css"
-    rel="stylesheet" />
-<link href="datetime/plugins/bootstrap-daterange/daterangepicker.css"
-    rel="stylesheet" />
+<link href="datetime/plugins/bootstrap-datetime-picker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="datetime/plugins/boootstrap-datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" />
+<link href="datetime/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css" rel="stylesheet" />
+<link href="datetime/plugins/bootstrap-daterange/daterangepicker.css" rel="stylesheet" />
 <link href="datetime/plugins/clockface/css/clockface.css" rel="stylesheet" />
 <link href="datetime/plugins/clockpicker/clockpicker.css" rel="stylesheet" />
 <!--REQUIRED THEME CSS -->
@@ -152,22 +147,60 @@
                                                             <div class="form-group">
                                                                 <label class="control-label mb-10"
                                                                     for="exampleInputpwd_1"><i class="fa fa-users"
-                                                                        aria-hidden="true"></i> Status</label>
+                                                                        aria-hidden="true"></i> Status Mail</label>
                                                                 <select id="inputState" class="form-control"
-                                                                    name="status">
+                                                                    name="status_email">
                                                                     <option selected value=""
-                                                                        {{request()->input('status') == '' ? 'selected' : ''}}>
+                                                                        {{request()->input('status_email') == '' ? 'selected' : ''}}>
                                                                         --- Select ---</option>
                                                                     <option value="1"
-                                                                        {{request()->input('status') == '1' ? 'selected' : ''}}>
+                                                                        {{request()->input('status_email') == '1' ? 'selected' : ''}}>
                                                                         Active</option>
                                                                     <option value="0"
-                                                                        {{request()->input('status') == '0' ? 'selected' : ''}}>
+                                                                        {{request()->input('status_email') == '0' ? 'selected' : ''}}>
                                                                         Not Active</option>
                                                                 </select>
                                                             </div>
                                                         </div>
-
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label mb-10"
+                                                                    for="exampleInputpwd_1"><i class="fa fa-users"
+                                                                        aria-hidden="true"></i> Level</label>
+                                                                <select id="inputState" class="form-control"
+                                                                    name="level">
+                                                                    <option selected value=""
+                                                                        {{request()->input('level') == '' ? 'selected' : ''}}>
+                                                                        --- Select ---</option>
+                                                                    <option value="0"
+                                                                        {{request()->input('level') == '0' ? 'selected' : ''}}>
+                                                                        User</option>
+                                                                    <option value="1"
+                                                                        {{request()->input('level') == '1' ? 'selected' : ''}}>
+                                                                        Admin</option>
+                                                                    <option value="2"
+                                                                        {{request()->input('level') == '2' ? 'selected' : ''}}>
+                                                                        Finance</option>
+                                                                    <option value="3"
+                                                                        {{request()->input('level') == '3' ? 'selected' : ''}}>
+                                                                        Test</option>
+                                                                    <option value="4"
+                                                                        {{request()->input('level') == '4' ? 'selected' : ''}}>
+                                                                        Customer</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label mb-10"
+                                                                    for="exampleInputpwd_1"><i class="fa fa-users"
+                                                                        aria-hidden="true"></i> Agency Level</label>
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Agency Level"
+                                                                    value="{{request()->input('agency_level')}}"
+                                                                    name="agency_level">
+                                                            </div>
+                                                        </div>
 
 
                                                     </div>
@@ -227,8 +260,14 @@
                                                             <th data-toggle="true">
                                                                 ID
                                                             </th>
+                                                            <th data-toggle="true">
+                                                                Name
+                                                            </th>
                                                             <th>
                                                                 MAIL
+                                                            </th>
+                                                            <th data-toggle="true">
+                                                                Phone
                                                             </th>
                                                             <th data-hide="phone">
                                                                 REGISTERED DATE
@@ -238,6 +277,12 @@
                                                             </th>
                                                             <th data-hide="phone,tablet">
                                                                 TREE
+                                                            </th>
+                                                            <th data-hide="phone">
+                                                                Level
+                                                            </th>
+                                                            <th data-hide="phone">
+                                                                Agency Level
                                                             </th>
                                                             <th data-hide="phone,tablet">
                                                                 STATUS
@@ -254,41 +299,42 @@
                                                         @foreach($user_list as $v)
                                                         <tr>
                                                             <td><b>{{ $v->User_ID }}</b></td>
-                                                            <td> 
-                                                                <span
-                                                                    id="input-email-{{$v->User_ID}}">{{$v->User_Email}}</span>
-                                                                <div id="action-email-{{$v->User_ID}}"
-                                                                    style="float:right">
-                                                                    <a data-id_user='{{$v->User_ID}}'
-                                                                        href="javascript:void(0)"
-                                                                        class="btn-edit-mail btn btn-warning btn-xs waves-effect waves-light"><i
-                                                                            class="fa fa-edit"> </i></a>
-                                                                </div>
-                                                            </td>
+                                                            <td>{{$v->User_Name}}</td>
+                                                            <td>{{$v->User_Email}}</td>
+                                                            <td>{{$v->User_Phone}}</td>
                                                             <td>{{ $v->User_RegisteredDatetime }}</td>
                                                             <td>{{ $v->User_Parent }}</td>
                                                             <td width="200px">
-                                                                <div style="overflow:auto;width:300px!important;height:60px">
+                                                                <div
+                                                                    style="overflow:auto;width:300px!important;height:60px">
                                                                     {{ str_replace(',',', ', $v->User_Tree) }}</div>
                                                             </td>
+                                                            <td>{{ $v->User_Level_Name }}</td>
+                                                            <td>{{ $v->User_Agency_Level }}</td>
                                                             <td>
                                                                 @if($v->User_EmailActive == 0)
                                                                 <span class="badge badge-danger r-3 blink">Not
-                                                                    Active</span>
+                                                                    Active Mail</span>
                                                                 @else
-                                                                <span class="badge badge-success r-3">Active</span>
+                                                                <span class="badge badge-warning r-3">Active Mail</span>
                                                                 @endif
                                                                 @php
                                                                 $enableKYC = App\Model\Profile::where('Profile_User',
                                                                 $v->User_ID)->where('Profile_Status', 1)->first();
                                                                 @endphp
                                                                 @if(isset($enableKYC))
-                                                                <span class="badge badge-success r-3">Verification
+                                                                <span class="badge badge-primary r-3">Verification
                                                                     turned on</span>
                                                                 @else
                                                                 <span class="badge badge-danger r-3">Verification not
                                                                     enabled</span>
                                                                 @endif
+                                                                @if($v->User_Status == 0)
+                                                                <span class="badge badge-danger r-3 blink">Block</span>
+                                                                @else
+                                                                <span class="badge badge-success r-3">Active</span>
+                                                                @endif
+
                                                             </td>
                                                             <td>
                                                                 @if($v->google2fa_User)
@@ -303,16 +349,14 @@
                                                             </td>
                                                             <td>
 
-                                                                <a href="{{ route('system.admin.getLoginByID', $v->User_ID) }}"
-                                                                    class="bt-loginID btn btn-primary btn-xs waves-effect waves-light"
+                                                                <a href="{{ route('system.admin.getEditUser', $v->User_ID) }}"
+                                                                    class="bt-loginID btn btn-warning btn-xs waves-effect waves-light"
                                                                     data-toggle="tooltip" title="Login"><i
-                                                                        class="fa fa-sign-in"> Login</i></a>
-                                                                @if($v->User_EmailActive == 0)
+                                                                        class="fa fa-edit"> Edit</i></a>
                                                                 <a href="{{ route('system.admin.getActiveMail', $v->User_ID) }}"
-                                                                    class="bt-loginID btn btn-success btn-xs waves-effect waves-light"
-                                                                    data-toggle="tooltip"><i
-                                                                        class="fa fa-check"> Active</i></a>
-                                                                @endif
+                                                                    class="bt-loginID btn btn-danger btn-xs waves-effect waves-light"
+                                                                    data-toggle="tooltip"><i class="fa fa-trash">
+                                                                        Delete</i></a>
                                                             </td>
                                                         </tr>
                                                         @endforeach
@@ -385,19 +429,19 @@
             $('#action-email-'+id_user).html(html_action_mail);
             $.ajax({
                 url : '{{ route('system.admin.getEditMailByID') }}',
-                type : "POST", 
-                dataType:"json", 
-                data : { 
+                type : "POST",
+                dataType:"json",
+                data : {
                     _token: "{{ csrf_token() }}",
                     id_user : id_user,
                     new_email : html_edit_mail
                 },
                 success : function (result){
                     if(!result){
-                        html_edit_mail = arr_email[id_user];  
+                        html_edit_mail = arr_email[id_user];
                         toastr.error('Email Already Exists', 'Error!', {timeOut: 3500});
                     }
-                    else{   
+                    else{
                         if(result == -1){
                             html_edit_mail = arr_email[id_user];
                             toastr.error('ID Does Not Exist', 'Error!', {timeOut: 3500});
@@ -416,8 +460,7 @@
 
 <!-- THIS PAGE LEVEL JS -->
 <script src="datetime/plugins/momentjs/moment.js"></script>
-<script
-    src="datetime/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js">
+<script src="datetime/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js">
 </script>
 <script src="datetime/plugins/boootstrap-datepicker/bootstrap-datepicker.min.js">
 </script>
