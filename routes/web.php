@@ -13,7 +13,7 @@
 
 Route::get('test', 'TestController@getTest');
 
-Route::get('/', 'System\IndexController@index   ')->name('getIndex');
+Route::get('/', 'System\IndexController@index')->name('getIndex');
 
 Route::get('login', 'Auth\LoginController@getLogin')->name('getLogin');
 Route::post('login', 'Auth\LoginController@postLogin')->name('postLogin');
