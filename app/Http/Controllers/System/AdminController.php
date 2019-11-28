@@ -242,6 +242,7 @@ class AdminController extends Controller
     }
     public function getWallet(Request $request)
     {
+        dd(123);
         $level = array(1 => 'Admin', 0 => 'Member', 2 => 'Finance', 3 => 'Support', 4 => 'Customer', 5 => 'Bot');
         $walletList = Money::join('currency', 'Money_Currency', '=', 'currency.Currency_ID')
             ->join('moneyaction', 'Money_MoneyAction', '=', 'moneyaction.MoneyAction_ID')
